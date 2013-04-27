@@ -8,7 +8,7 @@
  *      3. a restful server, for example: 'rest/search-vendor'. the request will be sent as 'rest/search-vendor/{query}'. receving a JSON 
  *  @target a string to navigator to, eg: somewhere?id=@id. Or a function with a param item{id, text, category}
  *  @param showWaitIconAhead if true the wait icon will show before the input
- *  @param delay the ms delay to display. default 700 !BUT the delay will not working if dataSource is an Array or Object!!!
+ *  @param delay the ms delay to display. default 700
  * 
 Example 1, search string locally startSearchBox($("input[name=query]"), ["This is the first string", "this is the second string"], function(item) {
         alert(item.text || item);
@@ -190,7 +190,7 @@ Example 3,
         }
  , next: function (event) {
       var active = this.$menu.find('.active').removeClass('active')
-        , next = $(active.nextAll('li')[0])
+        , next = active.next()
 
       if (!next.length) {
         next = $(this.$menu.find('li')[0])
@@ -201,7 +201,7 @@ Example 3,
 
   , prev: function (event) {
       var active = this.$menu.find('.active').removeClass('active')
-        , prev = $(active.prevAll('li')[0])
+        , prev = active.prev()
 
       if (!prev.length) {
         prev = this.$menu.find('li').last()
@@ -361,7 +361,7 @@ var startSearchBox = function(input, dataSource, target, showWaitIconAhead, dela
     }
     
     $(input).efpTypeahead({
-        "source" :typeof(dataSource) == "string" ? function(query, process) {
+        "source" : function(query, process) {
             if (timeoutId) {
                 clearTimeout(timeoutId);
             }
@@ -369,9 +369,8 @@ var startSearchBox = function(input, dataSource, target, showWaitIconAhead, dela
             timeoutId = setTimeout(function() {
                 updateBox(query, process);
 
-            }, delay)
-           
-        } :dataSource,
+            }, delay);
+        },
 
         "updater" : function(item) {
             if ( typeof (target) == 'function') {
