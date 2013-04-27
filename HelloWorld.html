@@ -1,0 +1,74 @@
+<html>
+	<head>
+		<link href="css/bootstrap.css" rel="stylesheet" rev="stylesheet"  type="text/css">
+
+		<meta content="text/html; charset=UTF-8" />
+
+		<script type="text/javascript" src= "jquery-1.8.2.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="efpTypeahead.js"></script>
+
+		<script type="text/javascript">
+			var source = Array();
+			source.push({
+				id : 1,
+				text : 'good to go',
+				category : "asin",
+			});
+			source.push({
+				id : 2,
+				text : 'gooooood to go',
+				category : "asin",
+			});
+			source.push({
+				id : 3,
+				text : 'good3 to go',
+				category : "inventory",
+			});
+
+			source.push({
+				id : 4,
+				text : 'good4 to go',
+				category : "inventory",
+			});
+
+			$(function() {
+				$("input.input1").efpTypeahead({
+					source : source,
+				});
+
+				$("input.input2").typeahead({
+					source : ['good to go', 'goooood to go'],
+				});
+
+			});
+		</script>
+
+		<style type="text/css">
+			.efp-typeahead-li.active {
+				background-color: rgb(0, 129, 194);
+				background-image: -moz-linear-gradient(center top , rgb(0, 136, 204), rgb(0, 119, 179));
+				background-repeat: repeat-x;
+			}
+			
+			.efp-typeahead-li.active a {
+				background : none;
+			}
+			.efp-typeahead-li.active a:hover{
+				background : none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			powerful typeahead
+			<input class="input1" type="text" />
+
+			normal typeahead
+			<input class="input2" type= "text" />
+		</div>
+
+	</body>
+
+</html>
