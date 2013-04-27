@@ -1,20 +1,5 @@
 /* =============================================================
- * bootstrap-typeahead.js v2.3.1
- * http://twitter.github.com/bootstrap/javascript.html#typeahead
- * =============================================================
- * Copyright 2012 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Enhancement of bootstrap-typeahead.js v2.3.1
  * ============================================================ */
 ! function($) {"use strict";// jshint ;_;
 
@@ -167,139 +152,120 @@
 			items.first().addClass('active')
 			this.$menu.html(items)
 			return this
-		},
-		next : function(event) {
-			var active = this.$menu.find('.active').removeClass('active'), next = active.next()
-
-			if (!next.length) {
-				next = $(this.$menu.find('li')[0])
-			}
-
-			next.addClass('active')
-		},
-		prev : function(event) {
-			var active = this.$menu.find('.active').removeClass('active'), prev = active.prev()
-
-			if (!prev.length) {
-				prev = this.$menu.find('li').last()
-			}
-
-			prev.addClass('active')
-		},
-		listen : function() {
-			this.$element.on('focus', $.proxy(this.focus, this)).on('blur', $.proxy(this.blur, this)).on('keypress', $.proxy(this.keypress, this)).on('keyup', $.proxy(this.keyup, this))
-
-			if (this.eventSupported('keydown')) {
-				this.$element.on('keydown', $.proxy(this.keydown, this))
-			}
-
-			this.$menu.on('click', $.proxy(this.click, this)).on('mouseenter', 'li', $.proxy(this.mouseenter, this)).on('mouseleave', 'li', $.proxy(this.mouseleave, this))
-		},
-		eventSupported : function(eventName) {
-			var isSupported = eventName in this.$element
-			if (!isSupported) {
-				this.$element.setAttribute(eventName, 'return;')
-				isSupported = typeof this.$element[eventName] === 'function'
-			}
-			return isSupported
-		},
-		move : function(e) {
-			if (!this.shown)
-				return
-
-			switch(e.keyCode) {
-				case 9:
-				// tab
-				case 13:
-				// enter
-				case 27:
-					// escape
-					e.preventDefault()
-					break
-
-				case 38:
-					// up arrow
-					e.preventDefault()
-					this.prev()
-					break
-
-				case 40:
-					// down arrow
-					e.preventDefault()
-					this.next()
-					break
-			}
-
-			e.stopPropagation()
-		},
-		keydown : function(e) {
-			this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40, 38, 9, 13, 27])
-			this.move(e)
-		},
-		keypress : function(e) {
-			if (this.suppressKeyPressRepeat)
-				return this.move(e)
-		},
-		keyup : function(e) {
-			switch(e.keyCode) {
-				case 40:
-				// down arrow
-				case 38:
-				// up arrow
-				case 16:
-				// shift
-				case 17:
-				// ctrl
-				case 18:
-					// alt
-					break
-
-				case 9:
-				// tab
-				case 13:
-					// enter
-					if (!this.shown)
-						return this.select()
-					break
-
-				case 27:
-					// escape
-					if (!this.shown)
-						return this.hide()
-					break
-
-				default:
-					this.lookup()
-			}
-
-			e.stopPropagation()
-			e.preventDefault()
-		},
-		focus : function(e) {
-			this.focused = true
-		},
-		blur : function(e) {
-			this.focused = false
-			if (!this.mousedover && this.shown)
-				this.hide()
-		},
-		click : function(e) {
-			e.stopPropagation()
-			e.preventDefault()
-			this.select()
-			this.$element.focus()
-		},
-		mouseenter : function(e) {
-			this.mousedover = true
-			this.$menu.find('.active').removeClass('active')
-			$(e.currentTarget).addClass('active')
-		},
-		mouseleave : function(e) {
-			this.mousedover = false
-			if (!this.focused && this.shown)
-				this.hide()
 		}
-	}
+ , next: function (event) {
+      var active = this.$menu.find('.active').removeClass('active')
+        , next = active.next()
+
+      if (!next.length) {
+        next = $(this.$menu.find('li')[0])
+      }
+
+      next.addClass('active')
+    }
+
+  , prev: function (event) {
+      var active = this.$menu.find('.active').removeClass('active')
+        , prev = active.prev()
+
+      if (!prev.length) {
+        prev = this.$menu.find('li').last()
+      }
+
+      prev.addClass('active')
+    }
+
+  , listen: function () {
+      this.$element
+        .on('blur',     $.proxy(this.blur, this))
+        .on('keypress', $.proxy(this.keypress, this))
+        .on('keyup',    $.proxy(this.keyup, this))
+
+      if ($.browser.chrome || $.browser.webkit || $.browser.msie) {
+        this.$element.on('keydown', $.proxy(this.keydown, this))
+      }
+
+      this.$menu
+        .on('click', $.proxy(this.click, this))
+        .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+    }
+
+  , move: function (e) {
+      if (!this.shown) return
+
+      switch(e.keyCode) {
+        case 9: // tab
+        case 13: // enter
+        case 27: // escape
+          e.preventDefault()
+          break
+
+        case 38: // up arrow
+          e.preventDefault()
+          this.prev()
+          break
+
+        case 40: // down arrow
+          e.preventDefault()
+          this.next()
+          break
+      }
+
+      e.stopPropagation()
+    }
+
+  , keydown: function (e) {
+      this.suppressKeyPressRepeat = !~$.inArray(e.keyCode, [40,38,9,13,27])
+      this.move(e)
+    }
+
+  , keypress: function (e) {
+      if (this.suppressKeyPressRepeat) return
+      this.move(e)
+    }
+
+  , keyup: function (e) {
+      switch(e.keyCode) {
+        case 40: // down arrow
+        case 38: // up arrow
+          break
+
+        case 9: // tab
+        case 13: // enter
+          if (!this.shown) return
+          this.select()
+          break
+
+        case 27: // escape
+          if (!this.shown) return
+          this.hide()
+          break
+
+        default:
+          this.lookup()
+      }
+
+      e.stopPropagation()
+      e.preventDefault()
+  }
+
+  , blur: function (e) {
+      var that = this
+      setTimeout(function () { that.hide() }, 150)
+    }
+
+  , click: function (e) {
+      e.stopPropagation()
+      e.preventDefault()
+      this.select()
+    }
+
+  , mouseenter: function (e) {
+      this.$menu.find('.active').removeClass('active')
+      $(e.currentTarget).addClass('active')
+    }
+
+  }
 
 	/* TYPEAHEAD PLUGIN DEFINITION
 	 * =========================== */
@@ -319,8 +285,8 @@
 	$.fn.efpTypeahead.defaults = {
 		source : [],
 		items : 8,
-		menu : '<ul class="typeahead dropdown-menu"></ul>',
-		item : '<li class="efp-typeahead-li"><a href="#"></a><span></span></li>',
+		menu : '<ul class="typeahead efp-dropdown-menu"></ul>',
+		item : '<li><a href="#"></a><span></span></li>',
 		minLength : 1
 	}
 	//	menu : '<ul class="typeahead dropdown-menu"></ul>',
